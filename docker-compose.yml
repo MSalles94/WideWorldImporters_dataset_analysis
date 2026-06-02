@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Teste1234_"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+      - ./data_source:/var/opt/mssql/backup
+    networks:
+      - data_net
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - data_net
+    depends_on:
+      - sqlserver
+
+volumes:
+  sqlserver_data:
+ 
+networks:
+  data_net:
