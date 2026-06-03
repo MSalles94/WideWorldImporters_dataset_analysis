@@ -14,16 +14,14 @@ services:
       - ./data_source:/var/opt/mssql/backup
     networks:
       - data_net
-
-  adminer:
-    image: adminer
-    container_name: adminer
+  
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:latest
+    container_name: cloudbeaver
     ports:
-      - "8080:8080"
+      - "8978:8978"
     networks:
       - data_net
-    depends_on:
-      - sqlserver
 
 volumes:
   sqlserver_data:

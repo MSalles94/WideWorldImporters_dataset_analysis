@@ -6,5 +6,5 @@ wget https://github.com/Microsoft/sql-server-samples/releases/download/wide-worl
 
 
 
-
-
+# run docker
+docker-compose up -d
