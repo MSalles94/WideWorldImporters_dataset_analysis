@@ -1,30 +1,38 @@
+# select docker version
 version: "3.9"
 
 services:
+  #define first container to run SQL Server
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver
     environment:
       ACCEPT_EULA: "Y"
+      # password as an enviroment parameter
       MSSQL_SA_PASSWORD: ${SA_PASSWORD}
     ports:
       - "1433:1433"
+      #defining volumes to access data outside of the container
     volumes:
       - sqlserver_data:/var/opt/mssql
-      - ./data_source:/var/opt/mssql/backup
+      - ./data_source_bak:/var/opt/mssql/backup
+      #create a network to link containers
     networks:
       - data_net
-  
+  # second container to run an application to interact with SQL Server
   cloudbeaver:
     image: dbeaver/cloudbeaver:latest
     container_name: cloudbeaver
     ports:
       - "8978:8978"
+    volumes:
+      - cloudbeaver_data:/opt/cloudbeaver/workspace
     networks:
       - data_net
 
 volumes:
   sqlserver_data:
+  cloudbeaver_data:
  
 networks:
   data_net:
