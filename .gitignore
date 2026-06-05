@@ -1,6 +1,6 @@
-/data_source
-.env
 
+.env
+WideWorldImporters-Full.bak
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
