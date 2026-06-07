@@ -12,7 +12,4 @@
 SELECT * 
 FROM TABLE_
 WHERE 1=1
-```
-
-
- 
+``` 
