@@ -30,18 +30,7 @@ ORDER BY COUNT(*) DESC;
 #### Output
 |CustomerID|CustomerName|ORDERS_|
 |----------|------------|-------|
-|90|Tailspin Toys (Tolna, ND)|150||CountryName|StateProvinceName|CUSTOMERS_|
-|-----------|-----------------|----------|
-|United States|Texas|2396|
-|United States|Pennsylvania|1830|
-|United States|New York|1650|
-|United States|California|1612|
-|United States|Illinois|1532|
-|United States|Ohio|1348|
-|United States|Missouri|1261|
-|United States|Wisconsin|1193|
-|United States|Minnesota|1145|
-|United States|Iowa|1138|
+|90|Tailspin Toys (Tolna, ND)|150|
 |831|Bhaavan Rai|147|
 |968|Anca Gogean|146|
 |804|Aleksandrs Riekstins|145|
