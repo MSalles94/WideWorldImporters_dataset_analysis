@@ -600,14 +600,64 @@ ORDER BY max_order_date
 <details>
 <summary>17. Is there seasonality in sales? Which months show the highest and lowest revenue?</summary>
 
-### SQL Solution
+### About sazonality
+
+#### SQL Solution
 
 ```sql
+WITH TABLE_ AS (
+	SELECT 
+		YEAR(o.OrderDate) AS YEAR_,
+		MONTH(o.OrderDate) as MONTH_,
+		 SUM( ol.Quantity*ol.UnitPrice) AS REVENUE
+	FROM WideWorldImporters.Sales.Orders o
+		LEFT JOIN WideWorldImporters.Sales.OrderLines ol
+			ON ol.OrderID=O.ORDERID
+	GROUP BY MONTH(o.OrderDate),YEAR(o.OrderDate) 
+	 ),
+month_rev_prcnt AS ( 
+	SELECT YEAR_,MONTH_,REVENUE/SUM(REVENUE) OVER (PARTITION BY YEAR_) AS SHARE
+	FROM TABLE_
+	)
+SELECT 
+	MONTH_,
+	ROUND(SUM(CASE WHEN YEAR_=2013 THEN SHARE END)*100,2)  AS SHARE_2013,
+	ROUND(SUM(CASE WHEN YEAR_=2014 THEN SHARE END)*100,2)  AS SHARE_2014,
+	ROUND( SUM(CASE WHEN YEAR_=2015 THEN SHARE END)*100,2)  AS SHARE_2015
+FROM month_rev_prcnt
+GROUP BY MONTH_
+ORDER BY MONTH_
 ```
 
-### Business Insights
+#### Output
 
--
+* Doesn't seem there is any relevant sazonal effect. every month has between 6 and 9 % of share in the year. 
+
+|MONTH_|SHARE_2013|SHARE_2014|SHARE_2015|
+|------|----------|----------|----------|
+|1|8.150000|8.160000|8.160000|
+|2|6.010000|6.940000|7.720000|
+|3|8.450000|7.680000|8.320000|
+|4|8.860000|8.180000|9.360000|
+|5|9.720000|9.230000|8.310000|
+|6|8.840000|8.600000|8.410000|
+|7|9.590000|9.550000|9.570000|
+|8|7.670000|8.150000|7.290000|
+|9|8.340000|7.720000|8.670000|
+|10|8.270000|8.950000|8.340000|
+|11|8.140000|8.070000|7.600000|
+|12|7.940000|8.760000|8.250000|
+
+### Max and Min months 
+
+#### SQL Solution
+
+
+```sql
+
+```
+
+#### Output
 
 </details>
 
