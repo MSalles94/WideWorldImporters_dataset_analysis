@@ -1,4 +1,8 @@
 
+[< Back ](../02.%20Explore%20database/README.md)
+
+---
+
 # Business Questions
 <p> For better understanding the database we answer some business questions.</p>
 
@@ -654,10 +658,33 @@ ORDER BY MONTH_
 
 
 ```sql
-
+WITH TABLE_ AS (
+	SELECT 
+		YEAR(o.OrderDate) AS YEAR_,
+		MONTH(o.OrderDate) as MONTH_,
+		 SUM( ol.Quantity*ol.UnitPrice) AS REVENUE
+	FROM WideWorldImporters.Sales.Orders o
+		LEFT JOIN WideWorldImporters.Sales.OrderLines ol
+			ON ol.OrderID=O.ORDERID
+	GROUP BY MONTH(o.OrderDate),YEAR(o.OrderDate) 
+	 ),
+RANK_TABLE AS (SELECT 
+	*,
+	ROW_NUMBER() OVER (ORDER BY REVENUE ASC) AS RANK_MIN,
+	ROW_NUMBER() OVER (ORDER BY REVENUE DESC) AS RANK_MAX
+FROM TABLE_
+WHERE 1=1)
+SELECT *
+FROM RANK_TABLE
+WHERE RANK_MIN=1 OR RANK_MAX =1
 ```
 
 #### Output
+
+|YEAR_|MONTH_|REVENUE|RANK_MIN|RANK_MAX|
+|-----|------|-------|--------|--------|
+|2015|7|5339212.00|41|1|
+|2013|2|2821282.20|1|41|
 
 </details>
 
@@ -936,3 +963,6 @@ ORDER BY MONTH_
 -
 
 </details>
+
+---
+[< Back ](../02.%20Explore%20database/README.md)

@@ -1,3 +1,7 @@
+[< Back](../)
+
+---
+
 # 02. Explore the Database
 
 
@@ -6,10 +10,16 @@
 * Answer some business questions with some SQL
 
 
+## a. Schema
+
+* data schema
+
+## [b. Business questions](./README_business_questions.md)
+
+* Here we can find some sql to better understand the dataset.
 
 
-```sql
-SELECT * 
-FROM TABLE_
-WHERE 1=1
-``` 
+
+---
+
+[< Back](../)

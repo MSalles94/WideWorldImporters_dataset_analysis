@@ -19,7 +19,7 @@
 * Connect with the SQLServer using DBeaver Cloud
 * Restore the Wide World Importers sample database
 
-### [02. Explore Database](/02.%20Explore%20the%20database/)
+### [02. Explore Database](/02.%20Explore%20database/)
 * Understand the data and relationships
 * Perform an explanatory analysis
 * Answer some business questions with some SQL
