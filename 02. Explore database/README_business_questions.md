@@ -680,14 +680,32 @@ WHERE RANK_MIN=1 OR RANK_MAX =1
 <details>
 <summary>18. What is the average time between order placement and delivery by delivery method?</summary>
 
-### SQL Solution
+#### SQL Solution
 
 ```sql
+WITH _TABLE AS (SELECT	
+	o.OrderID, 
+	i.DeliveryMethodID,
+	DATEDIFF(SECOND,o.PickingCompletedWhen, i.ConfirmedDeliveryTime) AS DIF_TIME
+FROM WideWorldImporters.Sales.Orders o
+	LEFT JOIN WideWorldImporters.Sales.Invoices i
+		ON i.OrderID=o.OrderID)
+SELECT 
+	T.DeliveryMethodID,dm.DeliveryMethodName,
+	AVG( DIF_TIME/(60*60.0))  AS HOURS_
+FROM _TABLE AS T
+	LEFT JOIN WideWorldImporters.Application.DeliveryMethods dm
+		ON dm.DeliveryMethodID=T.DeliveryMethodID
+WHERE T.DeliveryMethodID IS NOT NULL
+GROUP BY T.DeliveryMethodID,dm.DeliveryMethodName
 ```
 
-### Business Insights
+#### Output
 
--
+|DeliveryMethodID|DeliveryMethodName|HOURS_|
+|----------------|------------------|------|
+|3|Delivery Van|23.0483864|
+
 
 </details>
 
