@@ -338,26 +338,24 @@ WHERE RANK_MIN=1 OR RANK_MAX =1
 </details>
 
 <details>
-<summary>18. What is the average time between order placement and delivery by delivery method?</summary>
+<summary>18. What is the average delivery lead time after picking completion, by delivery method?</summary>
 
 #### SQL Solution
 
 ```sql
-WITH _TABLE AS (SELECT	
-	o.OrderID, 
+
+SELECT	
+	--o.OrderID, 
 	i.DeliveryMethodID,
-	DATEDIFF(SECOND,o.PickingCompletedWhen, i.ConfirmedDeliveryTime) AS DIF_TIME
+	dm.DeliveryMethodName,
+	AVG( DATEDIFF(SECOND,o.PickingCompletedWhen, i.ConfirmedDeliveryTime)/(60*60.0) ) AS DIF_TIME
 FROM WideWorldImporters.Sales.Orders o
 	LEFT JOIN WideWorldImporters.Sales.Invoices i
-		ON i.OrderID=o.OrderID)
-SELECT 
-	T.DeliveryMethodID,dm.DeliveryMethodName,
-	AVG( DIF_TIME/(60*60.0))  AS HOURS_
-FROM _TABLE AS T
+		ON i.OrderID=o.OrderID
 	LEFT JOIN WideWorldImporters.Application.DeliveryMethods dm
-		ON dm.DeliveryMethodID=T.DeliveryMethodID
-WHERE T.DeliveryMethodID IS NOT NULL
-GROUP BY T.DeliveryMethodID,dm.DeliveryMethodName
+		ON dm.DeliveryMethodID=i.DeliveryMethodID
+WHERE dm.DeliveryMethodName IS NOT NULL
+GROUP BY i.DeliveryMethodID,dm.DeliveryMethodName
 ```
 
 #### Output
@@ -372,30 +370,74 @@ GROUP BY T.DeliveryMethodID,dm.DeliveryMethodName
 <details>
 <summary>19. Which salespeople have the highest average sales value per order?</summary>
 
-### SQL Solution
+#### SQL Solution
 
 ```sql
+SELECT  
+	TOP 1
+		o.SalespersonPersonID,
+		p.FullName,
+		ROUND(AVG(ol.Quantity*ol.UnitPrice),2) AS AVG_SALES
+FROM WideWorldImporters.Sales.Orders o
+	LEFT JOIN WideWorldImporters.Sales.OrderLines ol
+		ON ol.OrderID=o.OrderID
+	LEFT JOIN WideWorldImporters.Application.People p
+		ON o.SalespersonPersonID=p.PersonID
+GROUP BY o.SalespersonPersonID,	p.FullName
+ORDER BY AVG(ol.Quantity*ol.UnitPrice) DESC
 ```
 
-### Business Insights
+#### Output
 
--
+|SalespersonPersonID|FullName|AVG_SALES|
+|-------------------|--------|---------|
+|16|Archer Lamble|783.280000|
+
 
 </details>
 
 <details>
-<summary>20. Which combinations of customer, city, and product category generate the highest revenue?</summary>
+<summary>20. Which combinations of city, and product category generate the highest revenue?</summary>
 
-### SQL Solution
+#### SQL Solution
 
 ```sql
+
+SELECT  TOP 10
+	c2.cityname,
+	sg.StockGroupName,
+	 ROUND( AVG(ol.Quantity*ol.UnitPrice) ,2) AS AVG_SALES
+FROM WideWorldImporters.Sales.Orders o
+	LEFT JOIN WideWorldImporters.Sales.OrderLines ol
+		ON ol.OrderID=o.OrderID 
+	--city
+	LEFT JOIN WideWorldImporters.Sales.customers c
+		ON o.CustomerID=c.CustomerID
+	LEFT JOIN WideWorldImporters.Application.Cities c2
+		ON c2.CityID=c.PostalCityID
+	--item category
+	LEFT JOIN WideWorldImporters.Warehouse.StockItemStockGroups sisg
+		ON ol.StockItemID=ol.StockItemID
+	LEFT JOIN WideWorldImporters.Warehouse.StockGroups sg
+		ON sisg.StockGroupID = sg.StockGroupID
+GROUP BY c2.cityname,sg.StockGroupName
+ORDER BY AVG(ol.Quantity*ol.UnitPrice) DESC
 ```
 
-### Business Insights
+#### Output
 
--
-
-
+|cityname|StockGroupName|AVG_SALES|
+|--------|--------------|---------|
+|Sigel|Toys|1091.050000|
+|Sigel|Computing Novelties|1091.050000|
+|Sigel|Packaging Materials|1091.050000|
+|Sigel|Furry Footwear|1091.050000|
+|Sigel|Mugs|1091.050000|
+|Sigel|Clothing|1091.050000|
+|Sigel|Novelty Items|1091.050000|
+|Sigel|USB Novelties|1091.050000|
+|Sigel|T-Shirts|1091.050000|
+|White Horse Beach|Toys|1026.200000|
 
 ---
 

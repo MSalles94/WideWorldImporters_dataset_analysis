@@ -10,14 +10,51 @@
 <details>
 <summary>21. Which customers show the highest revenue growth between consecutive years?</summary>
 
-### SQL Solution
+#### SQL Solution
 
 ```sql
+WITH CUSTOMER_BY_YEAR AS (
+	SELECT   
+		YEAR (o.OrderDate) AS YEAR_,
+		o.CustomerID, 
+		 SUM(ol.Quantity*ol.UnitPrice)/1.0  AS SALES
+	FROM WideWorldImporters.Sales.Orders o
+		LEFT JOIN WideWorldImporters.Sales.OrderLines ol
+			ON ol.OrderID=o.OrderID  
+	GROUP BY YEAR(o.OrderDate)  ,o.CustomerID
+	)
+SELECT  TOP 10
+	Y1.CustomerID,
+	c.customername,
+	CONCAT(Y1.YEAR_,'->',Y2.YEAR_)  AS PERIOD_,
+	Y1.SALES AS SALES_Y1,
+	Y2.SALES AS SALES_Y2,
+	ROUND( COALESCE( (Y2.SALES-Y1.SALES)/Y1.SALES ,0)*100,2) AS 'GROWTH%'
+FROM CUSTOMER_BY_YEAR AS Y1
+	LEFT JOIN CUSTOMER_BY_YEAR AS Y2
+		ON ( ((Y1.YEAR_+1)=(Y2.YEAR_) ) AND Y1.CustomerID=Y2.CustomerID)
+	LEFT JOIN WideWorldImporters.Sales.Customers c
+		ON c.CustomerID=Y1.CustomerID
+WHERE Y2.SALES IS NOT NULL
+ORDER BY COALESCE( (Y2.SALES-Y1.SALES)/Y1.SALES ,0)*100 DESC
+	
 ```
 
-### Business Insights
+#### Output
 
--
+|CustomerID|customername|PERIOD_|SALES_Y1|SALES_Y2|GROWTH%|
+|----------|------------|-------|--------|--------|-------|
+|1035|Manjunatha Karnik|2014->2015|433.000000|118445.650000|27254.650000|
+|1048|Abhra Ganguly|2015->2016|2020.000000|57951.350000|2768.880000|
+|1023|Farzana Habibi|2013->2014|4931.000000|97416.300000|1875.590000|
+|1038|Damodara Trivedi|2014->2015|6001.000000|71156.850000|1085.750000|
+|1037|David Jaramillo|2014->2015|10499.200000|114754.600000|992.980000|
+|1053|Luis Saucedo|2015->2016|4096.000000|39828.800000|872.380000|
+|1021|Fabrice Cloutier|2013->2014|5593.500000|52623.100000|840.790000|
+|1055|Adriana Pena|2015->2016|6858.650000|56516.800000|724.020000|
+|1036|Erik Malk|2014->2015|12213.200000|99498.400000|714.680000|
+|1020|Hai Banh|2013->2014|18498.000000|90770.350000|390.700000|
+
 
 </details>
 

@@ -29,9 +29,9 @@
 15. What is the percentage contribution of each product category to total revenue?
 16. Which customers have not made purchases during the last month available in the dataset?
 17. Is there seasonality in sales? Which months show the highest and lowest revenue?
-18. What is the average time between order placement and delivery by delivery method?
+18. What is the average delivery lead time after picking completion, by delivery method?
 19. Which salespeople have the highest average sales value per order?
-20. Which combinations of customer, city, and product category generate the highest revenue?
+20. Which combinations of city, and product category generate the highest revenue?
 
 
 ## [Level 3 — Advanced](./BusinessQuestions_L3.md)
