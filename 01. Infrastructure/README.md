@@ -1,3 +1,7 @@
+[<Project root](../)
+
+---
+
 # 01. Infrastructure
 
 <p>Before starting doing analysis we need an appropriated server to run the application to host the data simulating a real transactional system. </p>
@@ -7,7 +11,7 @@
 * connect dbeaver
 * restore data into database
  
-## a. Get data 
+## 1.1. Get data 
 
 <p>The data we are working with is a knon sample called WideWorldImporters from Microsoft. It's a fictional data used to demonstrate applications in SQL Server</p>
 <p>This data simulate a basic relational database of a ditribution company.</p>
@@ -21,7 +25,7 @@ cd /01. Infrastructure/data_source_bak
 wget https://github.com/Microsoft/sql-server-samples/releases/download/wide-world-importers-v1.0/WideWorldImporters-Full.bak
 ```
 
-## b. Run applications in Docker 
+## 1.2. Run applications in Docker 
 <p>Docker is the tool for isolate applications satisfying it's dependences. Basically is a more secure and reproducible way to get things done.</p>
 
 <p> To make it happend we need a file .yml to configure owr enviroment 
@@ -49,7 +53,7 @@ docker-compose up -d
 
 <p>Now both containers are running in different ports.</p>
 
-## c. Connect DBeaver with SQL Server
+## 1.3. Connect DBeaver with SQL Server
 
 <p> To acces DBeaver Cloud we need to open the browser and get the address baset in the configured port.</p>
 
@@ -60,12 +64,12 @@ docker ps
 ```
 <p> Once in the DBeaver web we need two little condigurations to access the database.</p>
 
-### i. Configure the access to DBeaver
+### 1.3.1. Configure the access to DBeaver
 
 <p>It's the easiest part. Only choose a username and password.</p>
 
 
-### ii. Define the connection with SQL Server
+### 1.3.2. Define the connection with SQL Server
 
 <p>Now we need to create a connection with the database.</p>
 
@@ -84,7 +88,7 @@ width="800">
 
 <p>Now we can perform SQL commands to interact with the SQL server.</p>
 
-## d. Restore data usin .bak
+## 1.4. Restore data usin .bak
 
 <p>.bak files are backups formats for databases. Once the file accessible for our SQL Server container (it was define it in the volumes part in docker file), we may operate a restoration process </p>
 
@@ -138,5 +142,5 @@ src="../images/1.3_DBeaver_ready.png"
 width="800"> 
 
 
-
-
+---
+[< Project root](../)
