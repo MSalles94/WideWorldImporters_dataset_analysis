@@ -281,28 +281,101 @@ For the most part of the customers (80%), the behavior is to buy within 9 to 11 
 <details>
 <summary>26. Are there customers with a high number of orders but low average revenue per order? Who are they?</summary>
 
-### SQL Solution
+#### SQL Solution
 
 ```sql
+WITH CUSTOMER_TABLE AS (
+	SELECT TOP (20) PERCENT 
+		o.CustomerID 
+		,COUNT( DISTINCT o.orderid) AS COUNT_ORDERS
+		,SUM(ol.Quantity*ol.UnitPrice)/COUNT( DISTINCT o.orderid) AS CUST_AVG_REVENUE
+	FROM WideWorldImporters.Sales.Orders o
+		LEFT JOIN WideWorldImporters.Sales.OrderLines ol
+			ON O.OrderID=ol.OrderID
+	GROUP BY o.CustomerID 
+	ORDER BY COUNT( DISTINCT o.orderid) DESC)
+SELECT TOP 5 
+	CT.CUSTOMERID,
+	customername,
+	COUNT_ORDERS,
+	CUST_AVG_REVENUE,
+	(SUM(COUNT_ORDERS*CUST_AVG_REVENUE) OVER ()/SUM(COUNT_ORDERS) OVER ()) AS TT_AVG_REVENUE
+FROM CUSTOMER_TABLE AS CT
+	LEFT JOIN WideWorldImporters.Sales.CUSTOMERS c
+		ON c.customerid=cT.customerid
+ORDER BY CUST_AVG_REVENUE
 ```
 
-### Business Insights
+#### Output
 
--
+Getting the top 20% customers with more orders we have those top 5 with lowest average revenue.
+
+|CUSTOMERID|customername|COUNT_ORDERS|CUST_AVG_REVENUE|TT_AVG_REVENUE|
+|----------|------------|------------|----------------|--------------|
+|823|Francisca Laureano|129|1753.412403|2400.067216|
+|184|Tailspin Toys (South Euclid, OH)|127|1900.503543|2400.067216|
+|493|Wingtip Toys (Federalsburg, MD)|137|1914.263138|2400.067216|
+|438|Wingtip Toys (Lucasville, OH)|127|1937.846062|2400.067216|
+|809|Madhu Dwivedi|125|1972.374800|2400.067216|
+
+
 
 </details>
 
 <details>
 <summary>27. Which product categories have the highest growth potential based on historical sales performance?</summary>
 
-### SQL Solution
+#### SQL Solution
 
 ```sql
+WITH STOCKGROUP_REVENUE AS (
+SELECT 
+	YEAR(o.orderdate) AS YEAR_,
+	sisg.StockGroupID,
+	SUM(ol.Quantity*ol.UnitPrice) AS REVENUE
+FROM WideWorldImporters.Sales.Orders o
+	LEFT JOIN WideWorldImporters.Sales.OrderLines ol
+		ON o.OrderID=ol.OrderID
+	LEFT JOIN WideWorldImporters.Warehouse.StockItemStockGroups sisg
+		ON sisg.StockItemID=ol.StockItemID
+WHERE YEAR(o.orderdate) < 2016
+GROUP BY YEAR(o.orderdate),	sisg.StockGroupID),
+	STOCKGROUP_MGROWTH AS (
+SELECT 
+	YEAR_,
+	StockGroupID,
+	(REVENUE-LAG(REVENUE) OVER (PARTITION BY STOCKGROUPID ORDER BY YEAR_))/
+	LAG(REVENUE) OVER (PARTITION BY STOCKGROUPID ORDER BY YEAR_) AS MONTH_GROWTH
+FROM STOCKGROUP_REVENUE)
+SELECT 
+	t.StockGroupID,
+	sg.StockGroupName,
+	AVG(MONTH_GROWTH)*100.0 AS AVG_ANUAL_GROWTH
+FROM STOCKGROUP_MGROWTH t
+	LEFT JOIN WideWorldImporters.Warehouse.StockGroups sg
+		ON sg.StockGroupID=t.StockGroupID
+WHERE MONTH_GROWTH IS NOT NULL
+GROUP BY t.StockGroupID,sg.StockGroupName
+ORDER BY SUM(MONTH_GROWTH) DESC
+
 ```
 
-### Business Insights
+#### Output
 
--
+
+
+|StockGroupID|StockGroupName|AVG_ANUAL_GROWTH|
+|------------|--------------|----------------|
+|7|USB Novelties|11.575500|
+|10|Packaging Materials|9.628100|
+|1|Novelty Items|9.522700|
+|9|Toys|9.464000|
+|8|Furry Footwear|9.008200|
+|3|Mugs|8.444300|
+|2|Clothing|7.705800|
+|6|Computing Novelties|7.647000|
+|4|T-Shirts|7.072600|
+
 
 </details>
 
