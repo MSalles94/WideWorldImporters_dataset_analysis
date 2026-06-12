@@ -382,28 +382,107 @@ ORDER BY SUM(MONTH_GROWTH) DESC
 <details>
 <summary>28. What is the impact of each salesperson on total revenue over time?</summary>
 
-### SQL Solution
+#### SQL Solution
 
 ```sql
+WITH ANUAL_REVENUE AS(
+SELECT 
+	YEAR(o.OrderDate) AS YEAR_,
+	o.SalespersonPersonID,
+	SUM(ol.Quantity*ol.UnitPrice) AS REVENUE
+FROM WideWorldImporters.Sales.Orders o
+	LEFT JOIN WideWorldImporters.Sales.OrderLines ol
+		ON ol.OrderID=o.OrderID
+GROUP BY  o.SalespersonPersonID,YEAR(o.OrderDate)),
+ ANUAL_SHARE AS (
+SELECT 
+	YEAR_,
+	SalespersonPersonID,
+	REVENUE,
+	REVENUE/SUM(REVENUE) OVER (PARTITION BY YEAR_) AS ANUAL_SHARE
+FROM ANUAL_REVENUE)
+SELECT 
+	SalespersonPersonID ,
+	fullname,
+	SUM(CASE WHEN YEAR_=2013 THEN  ANUAL_SHARE  END)*100 AS SHARE_2013,
+	SUM(CASE WHEN YEAR_=2014 THEN  ANUAL_SHARE  END)*100 AS SHARE_2014,
+	SUM(CASE WHEN YEAR_=2015 THEN  ANUAL_SHARE  END)*100 AS SHARE_2015,
+	SUM(CASE WHEN YEAR_=2016 THEN  ANUAL_SHARE  END)*100 AS SHARE_2016,
+	(SUM(REVENUE)/SUM(SUM(REVENUE)) OVER ())*100 AS TT_SHARE
+FROM ANUAL_SHARE as  a
+	LEFT JOIN WideWorldImporters.Application.people p
+		ON a.SalespersonPersonID=P.PERSONID
+GROUP BY SalespersonPersonID,fullname
+ORDER BY TT_SHARE DESC
+ 
+ 
 ```
 
-### Business Insights
+#### Output
 
--
+|SalespersonPersonID|fullname|SHARE_2013|SHARE_2014|SHARE_2015|SHARE_2016|TT_SHARE|
+|-------------------|--------|----------|----------|----------|----------|--------|
+|16|Archer Lamble|10.254600|10.569700|10.250100|11.005300|10.443400|
+|2|Kayla Woodcock|10.259800|10.592700|9.973600|9.705700|10.193400|
+|3|Hudson Onslow|10.575300|9.658500|9.984800|9.856600|10.029300|
+|15|Taj Shand|9.732100|10.115400|9.715700|11.170600|10.027500|
+|6|Sophia Hinton|10.117100|10.046400|9.993700|9.698000|10.002600|
+|13|Hudson Hollinworth|9.455600|10.244200|10.148200|9.999400|9.973400|
+|20|Jack Potter|10.114500|9.408300|10.220200|9.938800|9.919900|
+|14|Lily Code|9.504500|9.800100|10.595400|9.368600|9.915100|
+|7|Amy Trefl|9.996600|9.759000|9.546900|9.762300|9.755600|
+|8|Anthony Grosse|9.989600|9.805100|9.570900|9.494200|9.739300|
+
 
 </details>
 
 <details>
 <summary>29. Which regions have the greatest expansion potential considering customer count and average revenue?</summary>
 
-### SQL Solution
+#### SQL Solution
 
 ```sql
+WITH CUSTOMER_TABLE AS(
+SELECT 
+	o.CustomerID,
+	SUM(ol.Quantity*ol.UnitPrice) AS REVENUE
+FROM WideWorldImporters.Sales.Orders o
+	LEFT JOIN WideWorldImporters.Sales.OrderLines ol
+		ON o.OrderID=ol.OrderID
+GROUP BY o.CustomerID
+)
+SELECT 
+	sp.SalesTerritory,
+	COUNT(*) AS N_CUSTOMER,
+	(SUM(REVENUE)/SUM(SUM(REVENUE)) OVER ())*100 AS REVENUE_SHARE_PCNT,
+	SUM(REVENUE)/COUNT(*)  AS AVG_CUST_REVENUE
+FROM CUSTOMER_TABLE ct
+	LEFT JOIN WideWorldImporters.Sales.Customers c 
+		ON c.CustomerID=ct.CustomerID
+	LEFT JOIN WideWorldImporters.Application.Cities c2
+		ON c2.CityID=c.PostalCityID
+	LEFT JOIN WideWorldImporters.Application.StateProvinces sp
+		ON sp.StateProvinceID=c2.StateProvinceID
+GROUP BY sp.SalesTerritory
+ORDER BY N_CUSTOMER
+ 
+
 ```
 
-### Business Insights
+#### Output
 
--
+|SalesTerritory|N_CUSTOMER|REVENUE_SHARE_PCNT|AVG_CUST_REVENUE|
+|--------------|----------|------------------|----------------|
+|External|10|1.278500|227109.990000|
+|New England|33|4.459300|240040.263636|
+|Rocky Mountain|43|6.430300|265639.401162|
+|Far West|76|11.574000|270518.434210|
+|Great Lakes|77|11.722500|270432.622727|
+|Plains|87|13.533600|276325.736206|
+|Southwest|93|13.895900|265419.756989|
+|Mideast|98|14.946000|270911.317346|
+|Southeast|146|22.159500|269609.281164|
+
 
 </details>
 
