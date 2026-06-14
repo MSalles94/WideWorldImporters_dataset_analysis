@@ -14,7 +14,7 @@
 * PowerBI
 
 ## Steps
-### [01. Infrastructure](/01.%20Infrastructure/)
+### [01. Simulater ERP](/01.%20Simulate%20ERP/)
 * Run SQL server using Docker
 * Connect with the SQLServer using DBeaver Cloud
 * Restore the Wide World Importers sample database

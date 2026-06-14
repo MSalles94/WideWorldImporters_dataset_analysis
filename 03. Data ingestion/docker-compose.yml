@@ -1,0 +1,54 @@
+# select docker version
+version: "3.9"
+
+services:
+  #define first container to run SQL Server
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      # password as an enviroment parameter
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
+    ports:
+      - "1433:1433"
+      #defining volumes to access data outside of the container
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+      #- ./data_source_bak:/var/opt/mssql/backup
+      #create a network to link containers
+    networks:
+      - data_net
+  # warehouse database
+  postgres:
+    image: postgres:18
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: my_warehouse
+    volumes:
+      - postgres_warehouse:/var/lib/postgresql
+    ports:
+      - "5432:5432"
+    networks:
+      - data_net
+  #python docker for data ingestion
+  python_elt:
+    container_name: python_elt
+    build:
+      context: ./python_elt
+      dockerfile: ./Dockerfile
+
+    command: tail -f /dev/null
+
+
+    networks:
+      - data_net
+
+volumes:
+  sqlserver_data:
+  postgres_warehouse:
+ 
+networks:
+  data_net:

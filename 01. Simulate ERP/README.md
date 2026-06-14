@@ -2,7 +2,7 @@
 
 ---
 
-# 01. Infrastructure
+# 01. Simulate ERP
 
 <p>Before starting doing analysis we need an appropriated server to run the application to host the data simulating a real transactional system. </p>
 
