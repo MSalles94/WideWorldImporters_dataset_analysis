@@ -40,6 +40,9 @@ services:
     #keep the container running - for testing
     command: tail -f /dev/null
 
+    volumes:
+      - ./test_output:/app/output
+
     networks:
       - data_net
 

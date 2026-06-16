@@ -1,4 +1,6 @@
-
+test_output\*
+test_output/*
+test_output/*
 .env
 WideWorldImporters-Full.bak
 
