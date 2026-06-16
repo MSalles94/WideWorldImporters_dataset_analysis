@@ -34,7 +34,7 @@ wget https://github.com/Microsoft/sql-server-samples/releases/download/wide-worl
 
 <p> To make it happend we need a file .yml to configure owr enviroment <a href="./docker-compose.yml">docker-compose.yml</a>
 </p>
-
+ 
 <p>In this file we may find configuration parameters to define: </p>
 
 * SQL Server container
@@ -44,6 +44,14 @@ wget https://github.com/Microsoft/sql-server-samples/releases/download/wide-worl
 * DBeaver container as a better way to access database
     backup volume to save credentials
 * Network to make possible both applications interact
+
+<p>Before run docker, create a volume to be shared between projects. This way we may connect with the same docker volume from different docker projects.</p>
+
+```bash
+# create a docker volume
+
+docker volume create sqlserver_data
+```
 
 <p>Once the configuretion file is done we only have to command to run docker: </p>
 

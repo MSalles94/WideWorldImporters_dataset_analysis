@@ -26,10 +26,15 @@ services:
       - cloudbeaver_data:/opt/cloudbeaver/workspace
     networks:
       - data_net
-
+# define volumes as external and configure the names
+  # need to create the volumes in bash "docker volume create 'volume_name' "
 volumes:
   sqlserver_data:
+    external: true
+    name: sql_server_ERP
   cloudbeaver_data:
+    external: true
+    name: dbeaver_cred
  
 networks:
   data_net:

@@ -493,7 +493,7 @@ ORDER BY N_CUSTOMER
 ### SQL Solution
 
 ```sql
-```
+``` 
 
 ### Business Insights
 

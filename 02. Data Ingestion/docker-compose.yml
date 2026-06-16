@@ -45,10 +45,14 @@ services:
 
     networks:
       - data_net
-
+ 
 volumes:
   sqlserver_data:
+    external: true
+    name: sql_server_ERP
   postgres_warehouse:
+    external: true
+    name: postgres_warehouse
  
 networks:
   data_net:
