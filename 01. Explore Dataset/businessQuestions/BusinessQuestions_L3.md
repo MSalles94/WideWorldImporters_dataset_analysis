@@ -1,7 +1,8 @@
 
-[<./02. Explore DataBase](../02.%20Explore%20database/README.md)
 
-[<./02. Explore DataBase/Questions summary](../02.%20Explore%20database/businessQuestions.md) 
+| [< Cover](../../README.md) 
+| [< Explore Dataset ](../02.%20Explore%20database/README.md) 
+| [< Business Questions ](../businessQuestions/businessQuestions.md) |
 
 ---
 
@@ -502,6 +503,7 @@ ORDER BY N_CUSTOMER
 
 ---
 
-[<./02. Explore DataBase](../02.%20Explore%20database/README.md)
 
-[<./02. Explore DataBase/Questions summary](../02.%20Explore%20database/businessQuestions.md) 
+| [< Cover](../../README.md) 
+| [< Explore Dataset ](../02.%20Explore%20database/README.md) 
+| [< Business Questions ](../businessQuestions/businessQuestions.md) |

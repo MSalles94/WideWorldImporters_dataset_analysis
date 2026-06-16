@@ -14,33 +14,35 @@
 * PowerBI
 
 ## Steps
-### [01. Simulater ERP](/01.%20Simulate%20ERP/)
-* Run SQL server using Docker
+### [01. Explore Dataset](/01.%20Explore%20Dataset/)
+* Use Docker to run two applications
+    * SQL_server to host data
+    * DBeaver application to interact
 * Connect with the SQLServer using DBeaver Cloud
-* Restore the Wide World Importers sample database
+    * Restore the Wide World Importers sample database using a .bak file
+* Explore data
+    * Perform an explanatory analysis
+    * Answer some business questions with some SQL
 
-### [02. Explore Database](/02.%20Explore%20database/)
-* Understand the data and relationships
-* Perform an explanatory analysis
-* Answer some business questions with some SQL
+### [02. Data Ingestion](/02.%20Data%20Ingestion/)
+* Use docker to run tree applications
+    * SQL_server with the original data
+    * Postgres to be our warehouse
+    * Python_elt to operate a ingestion process
+* save data in postgres
 
-### [03. Define Business requirements]()
-* Identify business requirements
-* Define metrics and KPIs
-* Determine analytical dimensions
-
-### [04. Build a DataWarehouse]()
+### [03. Build a DataWarehouse]()
 * Extract data from the source system using Python
 * Transform data into a dimensional model
 * Load fact and dimension tables
 * Validate the resulting data warehouse
 
-### [05. Data Validation]()
+### [04. Data Validation]()
 * Validate KPIs against the source system
 * Verify dimensional model consistency
 * Perform data quality checks
 
-### [06. Business Intelligence]()
+### [05. Business Intelligence]()
 * Connect the data warehouse to a BI tool
 * Build dashboards
 * Generate business insights

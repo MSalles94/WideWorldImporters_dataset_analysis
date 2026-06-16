@@ -1,5 +1,6 @@
 
-[< Back ](../02.%20Explore%20database/README.md)
+| [< Cover](../../README.md) 
+| [< Explore Dataset ](../02.%20Explore%20database/README.md) |
 
 ---
 
@@ -64,4 +65,6 @@
 
 ---
 
-[< Back ](../02.%20Explore%20database/README.md)
+
+| [< Cover](../../README.md) 
+| [< Explore Dataset ](../02.%20Explore%20database/README.md) |
