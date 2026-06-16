@@ -2,7 +2,7 @@
 
 | [< Cover](../../README.md) 
 | [< Explore Dataset ](../02.%20Explore%20database/README.md) 
-| [< Business Questions ](../businessQuestions/businessQuestions.md) |
+| [< Business Questions ](../businessQuestions/README.md) |
 
 ---
 
@@ -506,4 +506,4 @@ ORDER BY N_CUSTOMER
 
 | [< Cover](../../README.md) 
 | [< Explore Dataset ](../02.%20Explore%20database/README.md) 
-| [< Business Questions ](../businessQuestions/businessQuestions.md) |
+| [< Business Questions ](../businessQuestions/README.md) |

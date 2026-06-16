@@ -164,12 +164,12 @@ width="800">
 ### 1.2.1. Business questions
 
 * Here we can find some SQL queries to better understand the dataset.
-    * [Questions summary](./businessQuesrions/businessQuestions.md)
+    * [Questions summary](./businessQuestions/README.md)
 * The questions are organized in levels: 
-    * [Level 1](./businessQuesrions/BusinessQuestions_L1.md) - Basic
-    * [Level 2](./businessQuesrions/BusinessQuestions_L2.md) - Intermediate
-    * [Level 3](./businessQuesrions/BusinessQuestions_L3.md) - Advanced
-    * [Level 4](./businessQuesrions/BusinessQuestions_L4.md) - Data Warehouse & Dashboard Design
+    * [Level 1](./businessQuestions/BusinessQuestions_L1.md) - Basic
+    * [Level 2](./businessQuestions/BusinessQuestions_L2.md) - Intermediate
+    * [Level 3](./businessQuestions/BusinessQuestions_L3.md) - Advanced
+    * [Level 4](./businessQuestions/BusinessQuestions_L4.md) - Data Warehouse & Dashboard Design
 
 ### 1.2.2. Schema
  ? get an image to demonstrate it ?

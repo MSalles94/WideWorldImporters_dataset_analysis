@@ -1,7 +1,6 @@
-
 | [< Cover](../../README.md) 
 | [< Explore Dataset ](../02.%20Explore%20database/README.md) 
-| [< Business Questions ](../businessQuestions/businessQuestions.md) |
+| [< Business Questions ](../businessQuestions/README.md) |
 
 ---
 
@@ -441,7 +440,6 @@ ORDER BY AVG(ol.Quantity*ol.UnitPrice) DESC
 
 ---
 
-
 | [< Cover](../../README.md) 
 | [< Explore Dataset ](../02.%20Explore%20database/README.md) 
-| [< Business Questions ](../businessQuestions/businessQuestions.md) |
+| [< Business Questions ](../businessQuestions/README.md) |
