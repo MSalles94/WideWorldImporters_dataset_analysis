@@ -1,0 +1,16 @@
+{
+  "sqlserver": {
+    "host": "sqlserver",
+    "port": 1433,
+    "database": "WideWorldImporters",
+    "user": "sa",
+    "password": "SuaSenha"
+  },
+  "postgres": {
+    "host": "postgres",
+    "port": 5432,
+    "database": "my_warehouse",
+    "user": "postgres",
+    "password": "postgres"
+  }
+}

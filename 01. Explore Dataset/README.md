@@ -2,32 +2,16 @@
 
 ---
 
-# 01. Explore dataset
+# Explore dataset
 
 <p>Before starting doing analysis we need an appropriated server to run the application to host the data simulating a real transactional system. </p>
-<p>We gonna perform the following steps:</p>
-
-1. [Run applications in Docker](#11-run-applications-in-docker)
-    1. [Configure docker-compose file](#111-configure-docker-compose-file)
-    2. [Create external volumes](#112-create-external-volumes)
-    3. [Run Docker](#113-run-docker)
-2. [Connect DBeaver with SQL Server](#12-connect-dbeaver-with-sql-server)
-    1. [Configure the access to DBeaver](#121-configure-the-access-to-dbeaver)
-    2. [Define the connection with SQL Server](#122-define-the-connection-with-sql-server)
-3. [Restore data using .bak](#13-restore-data-using-bak)
-    1. [Download the database backup .bak](#131-download-the-database-backup-bak)
-    2. [Restore database](#132-restore-database)
-4. [Data Exploration](#14-data-exploration)
-    1. [Business questions](#141-business-questions)
-    2. [Dataset Overview](#142-dataset-overview)
 
   
-
-## 1.1. Run applications in Docker 
+## 1. Run applications in Docker 
  
 <p>Docker is the tool for isolate applications satisfying it's dependences. Basically is a more secure and reproducible way to get things done.</p>
 
-### 1.1.1 Configure docker-compose file
+### 1.1 Configure docker-compose file
 
 <p> To make it happend we need a file .yml to configure owr enviroment <a href="./docker-compose.yml">docker-compose.yml</a>. With this file docker is able to create the docker images and start running the applications in containers.
 </p>
@@ -43,7 +27,7 @@
     * external volume 
 * Network to make possible both applications interact
 
-### 1.1.2. Create external volumes
+### 1.2. Create external volumes
 
 <p>Before run docker, create a volume to be shared between projects. This way we may connect with the same docker volume from different docker projects.</p>
 
@@ -55,7 +39,7 @@ docker volume create sqlserver_data
 docker volume create dbeaver_cred
 ```
 
-### 1.1.3. Run Docker
+### 1.3. Run Docker
 
 <p>Once the configuretion file is done we only have to command to run docker: </p>
 
@@ -68,7 +52,7 @@ docker-compose up -d
 
 <p>Now both containers are running.</p>
 
-## 1.2 Connect DBeaver with SQL Server
+## 2 Connect DBeaver with SQL Server
 
 <p> To acces DBeaver Cloud we need to open the browser and get the address baset in the configured port.</p>
 
@@ -79,12 +63,12 @@ docker ps
 ```
 <p> Once in the DBeaver web we need two little condigurations to access the database.</p>
 
-### 1.2.1. Configure the access to DBeaver
+### 2.1. Configure the access to DBeaver
 
 <p>It's the easiest part. Only choose a username and password.</p>
 
 
-### 1.2.2. Define the connection with SQL Server
+### 2.2. Define the connection with SQL Server
 
 <p>Now we need to create a connection with the database.</p>
 
@@ -103,12 +87,12 @@ width="800">
 
 <p>Now we can perform SQL commands to interact with the SQL server.</p>
 
-## 1.3 Restore data using .bak
+## 3. Restore data using .bak
 
 <p>.bak files are backups formats for databases. Once the file accessible for our SQL Server container (defined in docker-compose), we may operate a restoration process </p>
 
 
-### 1.3.1. Download the database backup .bak
+### 3.1. Download the database backup .bak
 
 <p>The data we are working with is a knon sample called WideWorldImporters from Microsoft. It's a fictional data used to demonstrate applications in SQL Server</p>
 <p>This data simulate a basic relational database of a ditribution company.</p>
@@ -121,7 +105,7 @@ width="800">
 wget https://github.com/Microsoft/sql-server-samples/releases/download/wide-world-importers-v1.0/WideWorldImporters-Full.bak
 ```
 
-### 1.3.2. Restore database
+### 3.2. Restore database
 
 <p>Using SQL we may restore the database in SQL server once the .bak directory is mapped as a volume. Perform the following commands to populate SQL server with .bak data.</p>
 
@@ -174,12 +158,12 @@ ORDER BY name;
 src="../images/1.3_DBeaver_ready.png" 
 width="800"> 
 
-## 1.4. Data Exploration
+## 4. Data Exploration
 
 <p> This step deals with data exploration. We will do it by answering some busines questions, in this process we will understand the business and start to think about data modeling.</p>
 
  
-### 1.4.1. Business questions 
+### 4.1. Business questions 
 
 <p>Asking questions to the dataset is a good way to understand data. This step is focused in answer some business questions using SQL.</p>
  
@@ -190,10 +174,13 @@ width="800">
 * [Level 3](./businessQuestions/BusinessQuestions_L3.md) - Advanced
 * [Level 4](./businessQuestions/BusinessQuestions_L4.md) - Data Warehouse & Dashboard Design
 
-### 1.4.2. Dataset Overview
+### 4.2. Dataset Overview
 
-<p>What we know about the data? </p>
- ? get an image to demonstrate it ?
+<p>Here we map and describe the known information about the transactional data.</p> 
+
+<p>The details are here:  <a href="./Data_overview.md">Dataset Overview</a>
+</p>
+
 
 ---
 | [< Cover](../) |

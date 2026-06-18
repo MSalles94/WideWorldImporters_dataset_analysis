@@ -1,23 +1,38 @@
-def app():
-    with open("./output/arquivo.txt", "w") as f:
-        f.write("Olá mundo!")
-    print('txt saved')
-    print('------------------------------')
-    from pandas import DataFrame
-    df_teste=DataFrame({"Test":[1,2,3],
-                     "steps":['docker','uv','python']})
-    df_teste.to_csv('./output/teste_file.csv',sep=';')
-    print('dataframe saved')
-    print(df_teste)
-    print('------------------------------')
-    print('Good Job!!!!')
-    print('------------------------------')
+import json
+import logging
+import pyodbc
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
+with open("config.json", "r") as f:
+    config = json.load(f)
 
+sql_cfg = config["sqlserver"]
 
+conn_string = (
+    f"DRIVER={{ODBC Driver 18 for SQL Server}};"
+    f"SERVER={sql_cfg['host']},{sql_cfg['port']};"
+    f"DATABASE={sql_cfg['database']};"
+    f"UID={sql_cfg['user']};"
+    f"PWD={sql_cfg['password']};"
+    "TrustServerCertificate=yes;"
+)
 
+try:
+    conn = pyodbc.connect(conn_string)
 
+    cursor = conn.cursor()
+    cursor.execute("SELECT @@VERSION")
 
-if __name__=="__main__":
-    app()
+    version = cursor.fetchone()[0]
+
+    logging.info("✅ Conexão com SQL Server realizada com sucesso")
+    logging.info(f"Versão: {version}")
+
+    conn.close()
+
+except Exception as e:
+    logging.error(f"❌ Erro na conexão: {e}")
