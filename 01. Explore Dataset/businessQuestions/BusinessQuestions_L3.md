@@ -490,14 +490,55 @@ ORDER BY N_CUSTOMER
 <details>
 <summary>30. How can customers be segmented into high, medium, and low-value groups based on revenue and purchase frequency?</summary>
 
-### SQL Solution
+#### SQL Solution
 
 ```sql
+WITH CUSTOMER_REVENUE AS (SELECT 
+	o.CustomerID,
+	o.OrderDate,
+	SUM(ol.Quantity*ol.UnitPrice) AS REVENUE
+FROM WideWorldImporters.Sales.Orders o
+	LEFT JOIN WideWorldImporters.Sales.OrderLines ol
+		ON o.OrderID=ol.OrderID
+GROUP BY o.CustomerID,o.OrderDate),
+SUMMARY_TABLE AS (SELECT 
+	CustomerID,
+	COUNT(*) AS ORDERS,
+	SUM(REVENUE)/COUNT(*) AS AVG_REVENUE
+FROM CUSTOMER_REVENUE
+GROUP BY CustomerID),
+	SCORE_TABLE AS (
+SELECT 
+	st.CustomerID,
+	c.CustomerName,
+	NTILE(3) OVER (ORDER BY ORDERS ASC) AS frequency_level,
+	NTILE(3) OVER (ORDER BY AVG_REVENUE ASC) AS revenue_level,
+	NTILE(3) OVER (ORDER BY ORDERS ASC)+NTILE(3) OVER (ORDER BY AVG_REVENUE ASC) AS CUSTOMER_SCORE
+FROM SUMMARY_TABLE st
+	LEFT JOIN WideWorldImporters.Sales.Customers c
+		on c.CustomerID=st.customerID)
+SELECT top 5
+	CustomerID,
+	CustomerName,
+	CUSTOMER_SCORE,
+	CASE 
+		WHEN CUSTOMER_SCORE IN (6) THEN 'HIGH'
+		WHEN CUSTOMER_SCORE IN (4,5) THEN 'MEDIUM'
+		ELSE 'LOW'
+	END AS SEGMENTATION
+FROM SCORE_TABLE
+ORDER BY CUSTOMER_SCORE DESC
 ``` 
 
-### Business Insights
+#### Output
 
--
+|CustomerID|CustomerName|CUSTOMER_SCORE|SEGMENTATION|
+|----------|------------|--------------|------------|
+|67|Tailspin Toys (Sentinel Butte, ND)|6|HIGH|
+|877|Leyla Siavashi|6|HIGH|
+|848|Alvin Bollinger|6|HIGH|
+|975|Prabodh Nair|6|HIGH|
+|452|Wingtip Toys (Lake Davis, CA)|6|HIGH|
 
 </details>
 
