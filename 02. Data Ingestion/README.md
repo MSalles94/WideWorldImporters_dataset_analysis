@@ -4,8 +4,12 @@
 
 # 02. Data Ingestion
 
-* Configure docker
-* Make a python script to ingest data
+1. Configure Docker
+2. Make a python script to ingest data
+
+## 2.1. Configure Docker
+
+## 2.2. Ingest data
 
 ---
 | [< Cover](../) |
