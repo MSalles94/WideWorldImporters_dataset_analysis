@@ -10,15 +10,21 @@ WORKDIR /app
 # Add virtual environment to PATH so we can use installed packages
 ENV PATH="/app/.venv/bin:$PATH"
 
+
+#install the driver for connect in database
+RUN apt-get update && \
+    apt-get install -y unixodbc unixodbc-dev
+
 # Copy dependency files first (better layer caching)
 COPY "pyproject.toml" "uv.lock" ".python-version" ./
 # Install dependencies from lock file (ensures reproducible builds)
 RUN uv sync --locked
+ 
 
 # Copy application code
-COPY app.py pipeline.py
+COPY app.py connect_database.py ./
 
 # Set entry point
-ENTRYPOINT ["uv", "run", "python", "pipeline.py"]
+#ENTRYPOINT ["uv", "run", "python", "app.py"]
 
-RUN echo "------------->Done<-------------"
+ 

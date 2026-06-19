@@ -1,38 +1,32 @@
-import json
+from connect_database import sqlserver_engine,postgres_engine
 import logging
-import pyodbc
+from pandas import read_sql
+import datetime 
+
+log_file = f"output/logs_{datetime.date.today()}.log"
 
 logging.basicConfig(
     level=logging.INFO,
+    handlers=[
+        logging.FileHandler(log_file),
+        logging.StreamHandler()
+    ],
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
+ 
+tables={"customers": "Sales.Customers"}
 
-with open("config.json", "r") as f:
-    config = json.load(f)
+for target_table, source_table in tables.items():
 
-sql_cfg = config["sqlserver"]
+    try:
+        logging.info(f"🔄 Extraindo: {source_table}")
 
-conn_string = (
-    f"DRIVER={{ODBC Driver 18 for SQL Server}};"
-    f"SERVER={sql_cfg['host']},{sql_cfg['port']};"
-    f"DATABASE={sql_cfg['database']};"
-    f"UID={sql_cfg['user']};"
-    f"PWD={sql_cfg['password']};"
-    "TrustServerCertificate=yes;"
-)
+        query = f"SELECT * FROM {source_table}"
+        df = read_sql(query, sqlserver_engine)
 
-try:
-    conn = pyodbc.connect(conn_string)
+        logging.info(f"📦 {target_table}: {len(df)} linhas extraídas")
+        logging.info(f"Amostra da tabela {source_table}:\n{df.head(3)}")
+ 
 
-    cursor = conn.cursor()
-    cursor.execute("SELECT @@VERSION")
-
-    version = cursor.fetchone()[0]
-
-    logging.info("✅ Conexão com SQL Server realizada com sucesso")
-    logging.info(f"Versão: {version}")
-
-    conn.close()
-
-except Exception as e:
-    logging.error(f"❌ Erro na conexão: {e}")
+    except Exception as e:
+        logging.error(f"❌ Erro na tabela {target_table}: {e}")
