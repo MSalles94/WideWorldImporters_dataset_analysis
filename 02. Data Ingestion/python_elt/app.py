@@ -1,32 +1,53 @@
-from connect_database import sqlserver_engine,postgres_engine
-import logging
-from pandas import read_sql
-import datetime 
-
-log_file = f"output/logs_{datetime.date.today()}.log"
-
-logging.basicConfig(
-    level=logging.INFO,
-    handlers=[
-        logging.FileHandler(log_file),
-        logging.StreamHandler()
-    ],
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
+# import libs
+from utils.database_manipulation import read_table,load_table,try_to_connect,ensure_schema
+from utils.tables_map import tables_map
+from utils.logs_manager import define_log,map_log_folder
+import os
  
-tables={"customers": "Sales.Customers"}
+log_file_path=map_log_folder()
 
-for target_table, source_table in tables.items():
+#define a log file
+logger_pipeline=define_log('_pipeline_log',log_file_path)
+logger_pipeline.info("Starting data ingestion process") 
+
+#Test database connection
+logger_pipeline.info("Check postgress connection")
+logger_pipeline.info(f"     Connection test: {try_to_connect(MAX_RETRIES = 30)}")
+
+
+#check if schema exists
+schema_name='bronze' 
+logger_pipeline.info(ensure_schema(schema_name=schema_name)    )
+ 
+
+# loop to ingest data - extract and load
+for target_table, source_table in tables_map.items():
+    #start log
+    logger_pipeline.info(f"Starting  {target_table} step")
+    logger = define_log(target_table,log_file_path)
+     
 
     try:
-        logging.info(f"🔄 Extraindo: {source_table}")
+        logger.info(f'Starting ELT process in the table: {target_table}')
+        logger.info(f'  Full reference: {os.getenv('POSTGRES_DB')}.{schema_name}.{target_table}')
+        logger.info(f"  Extracting data from {os.getenv('SQL_SERVER_DB')}.{source_table}")
+        logger.info('----------------------------------------------------------------------')
+        
+        #read
+        logger.info(f"Read data from table: {source_table}")
+        df =read_table(table_name=source_table)
 
-        query = f"SELECT * FROM {source_table}"
-        df = read_sql(query, sqlserver_engine)
+        logger.info(
+            f"  {len(df)} extracted rows from {os.getenv('SQL_SERVER_DB')}.{source_table}"
+        )
 
-        logging.info(f"📦 {target_table}: {len(df)} linhas extraídas")
-        logging.info(f"Amostra da tabela {source_table}:\n{df.head(3)}")
- 
+        #load
+        logger.info(f"Load data into table: {schema_name}")
+        load_table(df,table_name=target_table,schema_name=schema_name)
+
+        logger.info(f"{ target_table} - Process Completed")
 
     except Exception as e:
-        logging.error(f"❌ Erro na tabela {target_table}: {e}")
+        logger.error(f"Error in {target_table}: {e}")
+
+logger_pipeline.info(f"Data ingestion completed")

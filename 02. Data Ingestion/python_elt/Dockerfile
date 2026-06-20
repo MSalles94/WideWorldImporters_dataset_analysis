@@ -22,9 +22,10 @@ RUN uv sync --locked
  
 
 # Copy application code
-COPY app.py connect_database.py ./
+COPY app.py ./
+COPY utils ./utils
 
 # Set entry point
-#ENTRYPOINT ["uv", "run", "python", "app.py"]
+ENTRYPOINT ["uv", "run", "python", "app.py"]
 
  

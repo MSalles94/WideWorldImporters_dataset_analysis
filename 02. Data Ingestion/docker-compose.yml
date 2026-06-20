@@ -12,8 +12,7 @@ services:
       - "1433:1433"
       #defining volumes to access data outside of the container
     volumes:
-      - sqlserver_data:/var/opt/mssql
-      #- ./data_source_bak:/var/opt/mssql/backup
+      - sqlserver_data:/var/opt/mssql 
       #create a network to link containers
     networks:
       - data_net
@@ -41,6 +40,7 @@ services:
     command: tail -f /dev/null
 
     volumes:
+      #create a volume to export files as output and logs
       - ./test_output:/app/output
 
     networks:
@@ -52,6 +52,7 @@ services:
       SQL_SERVER_HOST: sqlserver
       SQL_SERVER_USER: sa
       SQL_SERVER_PASSWORD: ${SA_PASSWORD}
+      SQL_SERVER_DB: WideWorldImporters
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: my_warehouse
