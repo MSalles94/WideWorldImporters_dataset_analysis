@@ -70,7 +70,7 @@ def ensure_schema(engine=postgres_engine, schema_name='bronze'):
 
 def read_table(table_name,engine=sqlserver_engine):
     query=f""" 
-            SELECT TOP 99  
+            SELECT   
                 GETDATE() AS extraction_datetime,
                 * 
             FROM {table_name} """

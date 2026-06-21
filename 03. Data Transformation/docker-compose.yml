@@ -1,0 +1,37 @@
+services:
+  #define first container to run SQL Server
+  postgres:
+    image: postgres:18
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: my_warehouse
+    volumes:
+      - postgres_warehouse:/var/lib/postgresql
+    ports:
+      - "1434:5432"
+    networks:
+      - data_net
+  # second container to run an application to interact with SQL Server
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:latest
+    container_name: cloudbeaver
+    ports:
+      - "8978:8978"
+    volumes:
+      - cloudbeaver_data:/opt/cloudbeaver/workspace
+    networks:
+      - data_net
+# define volumes as external and configure the names
+  # need to create the volumes in bash "docker volume create 'volume_name' "
+volumes:
+  postgres_warehouse:
+    external: true
+    name: postgres_warehouse
+  cloudbeaver_data:
+    external: true
+    name: dbeaver_cred
+ 
+networks:
+  data_net:
