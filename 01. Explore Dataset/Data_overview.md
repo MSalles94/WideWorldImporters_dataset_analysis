@@ -31,7 +31,6 @@
     * InvoiceLines
 * CustomerTransactions
 
-
 ### 1.3. Warehouse Schema
 <p>Here we have data about products and inventory balance.</p>
 <p>There are many reference entities about products and historic information about material movement.</p>
