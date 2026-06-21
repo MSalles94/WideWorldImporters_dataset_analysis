@@ -35,7 +35,7 @@
 # create a docker volume
     # observe that both are configured in docker-compose.yml
 
-docker volume create sqlserver_data
+docker volume create sql_server_ERP
 docker volume create dbeaver_cred
 ```
 
@@ -123,18 +123,10 @@ FROM DISK = '/var/opt/mssql/backup/WideWorldImporters-Full.bak';
 RESTORE DATABASE WideWorldImporters
 FROM DISK = '/var/opt/mssql/backup/WideWorldImporters-Full.bak'
 WITH
-MOVE 'WWI_Primary'
-    TO '/var/opt/mssql/data/WideWorldImporters.mdf',
-
-MOVE 'WWI_UserData'
-    TO '/var/opt/mssql/data/WideWorldImporters_UserData.ndf',
-
-MOVE 'WWI_Log'
-    TO '/var/opt/mssql/data/WideWorldImporters.ldf',
-
-MOVE 'WWI_InMemory_Data_1'
-    TO '/var/opt/mssql/data/WideWorldImporters_InMemory_Data_1',
-
+MOVE 'WWI_Primary' TO '/var/opt/mssql/data/WideWorldImporters.mdf',
+MOVE 'WWI_UserData' TO '/var/opt/mssql/data/WideWorldImporters_UserData.ndf',
+MOVE 'WWI_Log' TO '/var/opt/mssql/data/WideWorldImporters.ldf',
+MOVE 'WWI_InMemory_Data_1' TO '/var/opt/mssql/data/WideWorldImporters_InMemory_Data_1.ndf',
 REPLACE,
 STATS = 10;
 

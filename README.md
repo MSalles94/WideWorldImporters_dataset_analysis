@@ -9,10 +9,10 @@
 
 * Docker 
 * SQL Server
+* Porstgres
 * Python    
     * Pandas
-    * Pyodbc
-* Postgres
+    * sqlalchemy
 * PowerBI
 
 ## Steps
