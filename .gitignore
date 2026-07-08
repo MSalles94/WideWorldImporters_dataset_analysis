@@ -1,7 +1,8 @@
 log_*/ 
-.env
+ 
 .samples
-WideWorldImporters-Full.bak
+#ignore the backup file , heavy file to keep in repo
+WideWorldImporters-Full.bak 
 
 
 # Byte-compiled / optimized / DLL files
@@ -154,7 +155,7 @@ activemq-data/
 *.sage.py
 
 # Environments
-.env
+#.env # in a real project , keep it ignored
 .envrc
 .venv
 env/
