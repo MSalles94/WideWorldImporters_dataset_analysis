@@ -1,11 +1,20 @@
 services:
-  python_ingestion:
-    container_name: python_ingestion
-    build:
-      context: ./python_ingestion
-      dockerfile: ./Dockerfile
+  data_pipeline:
+    container_name: data_pipeline
+    image: python:3.12.1-slim
+    working_dir: /app
+    environment:
+      PATH: "/app/.venv/bin:$PATH"
+    
     #keep the container running - for testing
-    command: tail -f /dev/null
+    #command: tail -f /dev/null
+    command: >
+      bash -c "
+      apt-get update &&
+      apt-get install -y unixodbc unixodbc-dev &&
+      pip install uv &&
+      uv sync --locked &&
+      uv run python app.py
 
     volumes:
       #create a volume to export files as output and logs
@@ -26,3 +35,6 @@ services:
       POSTGRES_DB: my_warehouse
 networks:
   data_net:
+
+
+
