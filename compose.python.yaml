@@ -1,20 +1,13 @@
 services:
   data_pipeline:
     container_name: data_pipeline
-    image: python:3.12.1-slim
-    working_dir: /app
-    environment:
-      PATH: "/app/.venv/bin:$PATH"
+
+    build:
+      context: ./python_pipelines
+      dockerfile: ./Dockerfile.python
     
-    #keep the container running - for testing
-    #command: tail -f /dev/null
-    command: >
-      bash -c "
-      apt-get update &&
-      apt-get install -y unixodbc unixodbc-dev &&
-      pip install uv &&
-      uv sync --locked &&
-      uv run python app.py
+    #keep the container running
+    command: tail -f /dev/null
 
     volumes:
       #create a volume to export files as output and logs
@@ -22,17 +15,21 @@ services:
 
     networks:
       - data_net
-    depends_on:
-      - sqlserver
-      - postgres
+    #depends_on:
+    #  - sqlserver
+    #  - postgres
     environment:
-      SQL_SERVER_HOST: sqlserver
-      SQL_SERVER_USER: sa
+      PATH: "/app/.venv/bin:$PATH"
+      
+      SQL_SERVER_HOST: ${SQL_SERVER_HOST}
+      SQL_SERVER_USER: ${SQL_SERVER_USER}
       SQL_SERVER_PASSWORD: ${SA_PASSWORD}
-      SQL_SERVER_DB: WideWorldImporters
+      SQL_SERVER_DB: ${SQL_SERVER_DB}
+
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: my_warehouse
+      POSTGRES_DB: ${POSTGRES_DB}
+
 networks:
   data_net:
 

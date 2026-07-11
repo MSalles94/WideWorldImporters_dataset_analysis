@@ -155,7 +155,7 @@ activemq-data/
 *.sage.py
 
 # Environments
-#.env # in a real project , keep it ignored
+.env 
 .envrc
 .venv
 env/
