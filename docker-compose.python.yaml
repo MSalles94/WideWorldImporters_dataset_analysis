@@ -1,11 +1,11 @@
 services:
-  data_pipeline:
-    container_name: data_pipeline
+  python:
+    container_name: python
 
     build:
       #context: ./docker_python
       #dockerfile: ./Dockerfile.python
-      dockerfile: ./docker_python/Dockerfile.python
+      dockerfile: ./docker_files/Dockerfile.python
     
     #keep the container running
     command: tail -f /dev/null
@@ -13,7 +13,7 @@ services:
     volumes:
       #create a volume to export files as output and logs
       - ./output:/app/output
-      - ./python_source:./app/python_source
+      - ./python_source:/app/python_source
 
     networks:
       - data_net

@@ -1,10 +1,8 @@
-from python_source.modules import utils
-
+ 
 def main ():
     print(f"""
     ----------------------------------------------
-    Testing python container.
-    parameter importation:{utils.parameter}
+    simple test
     ----------------------------------------------
     """)
     pass

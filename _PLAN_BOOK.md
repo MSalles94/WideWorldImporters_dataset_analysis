@@ -1,26 +1,12 @@
 # PLAN BOOK
 
-## 01. Explore database
+## Passo atual
 
-## 02. Data ingestion
+- docker rodando com aplicações python e bancos de dados
+- airflow rodando codigos python usando o container criado
 
-* Inserir texto nas respostas
-* Questões para refazer:
-    * ? 
----
+## próximo
 
+- criar DAG usando python para extração de dados para um ambiente datalake
+- criar DAG para manipular dbt
 
- Transformação entre camadas:
- * Bronze
-    * copiar dado
-    * pouca ou nenhuma transformação
- * Silver
-    * padronizar nomes de colunas
-    * remover duplicados
-    * tratar nulos
-    * criar colunas úteis
- * Gold
-    * modelagem dimensional
-    * criar fatos e dimensões
-
-    
