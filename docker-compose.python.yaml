@@ -3,8 +3,9 @@ services:
     container_name: data_pipeline
 
     build:
-      context: ./python_pipelines
-      dockerfile: ./Dockerfile.python
+      #context: ./docker_python
+      #dockerfile: ./Dockerfile.python
+      dockerfile: ./docker_python/Dockerfile.python
     
     #keep the container running
     command: tail -f /dev/null
@@ -12,6 +13,7 @@ services:
     volumes:
       #create a volume to export files as output and logs
       - ./output:/app/output
+      - ./python_source:./app/python_source
 
     networks:
       - data_net
@@ -23,7 +25,7 @@ services:
       
       SQL_SERVER_HOST: ${SQL_SERVER_HOST}
       SQL_SERVER_USER: ${SQL_SERVER_USER}
-      SQL_SERVER_PASSWORD: ${SA_PASSWORD}
+      SQL_SERVER_PASSWORD: ${SQL_SERVER_PASSWORD}
       SQL_SERVER_DB: ${SQL_SERVER_DB}
 
       POSTGRES_USER: ${POSTGRES_USER}
