@@ -10,3 +10,15 @@
 - criar DAG usando python para extração de dados para um ambiente datalake
 - criar DAG para manipular dbt
 
+
+## SELECAO DE TABELAS
+
+* sales.orderlines
+    * orders
+    * customers
+    * custoercategories
+* application
+    * cities
+    * countries
+    * people
+    * stateprovinces

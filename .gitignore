@@ -1,5 +1,5 @@
 log_*/ 
- 
+data_lake
 .samples
 #ignore the backup file , heavy file to keep in repo
 WideWorldImporters-Full.bak 
