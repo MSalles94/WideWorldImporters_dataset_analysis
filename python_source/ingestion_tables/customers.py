@@ -5,10 +5,11 @@ from python_source.modules.log_control import create_log_object
 import pandas as pd
 
 
-path_obj=define_path()
+path_obj=define_path(table_name='customers')
 DATA_LAKE_PATH=path_obj.DATA_LAKE_PATH
-
-logger=create_log_object(path_obj.LOG_PATH)
+LOG_PATH=path_obj.LOG_PATH
+ 
+logger=create_log_object( LOG_PATH)
 
   
 # -------------------------
@@ -20,6 +21,7 @@ def get_connection():
     logger.mensage(
         "Criando conexão SQL Server"
     )
+    
     sqlserver_access=database_connection(database='sqlserver')
     conn=sqlserver_access.conn
 

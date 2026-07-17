@@ -6,27 +6,29 @@ class define_path():
         BASE_PATH = Path(__file__).parent
 
         #
-        self.DATA_LAKE_PATH = (
+        DIR_PATH_DATA_LAKE = (
             BASE_PATH
             / "data_lake"
             / "bronze"
-            / table_name
+            
         )
-        self.DATA_LAKE_PATH.mkdir(
+        DIR_PATH_DATA_LAKE.mkdir(
                     parents=True,
                     exist_ok=True
                 )
+    
+        self.DATA_LAKE_PATH=(DIR_PATH_DATA_LAKE / table_name)
 
 
 
         #
-        self.LOG_PATH = (
+        DIR_LOG = (
             BASE_PATH.parent.parent
             / "logs"
-            / f"{table_name}.log"
         )
-        self.LOG_PATH.mkdir(
+        DIR_LOG.mkdir(
                     parents=True,
                     exist_ok=True
                 )
+        self.LOG_PATH=(DIR_LOG / f'{table_name}.log')
 

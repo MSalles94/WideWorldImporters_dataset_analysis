@@ -41,8 +41,10 @@ class database_connection():
 
         try: 
             self.conn=pyodbc.connect(
-                self.connection_string
-            )
+                            self.connection_string
+                        )
             print(f'- {self.database} connected')
-        except:
+        except Exception as e:
             print('- connection fail')
+            print(f"""error: 
+                    {e}""")

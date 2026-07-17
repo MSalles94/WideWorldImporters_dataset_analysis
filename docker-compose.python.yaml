@@ -14,6 +14,7 @@ services:
       #create a volume to export files as output and logs
       - ./output:/app/output
       - ./python_source:/app/python_source
+      - ./logs:/app/logs
 
     networks:
       - data_net
