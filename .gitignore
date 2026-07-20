@@ -1,10 +1,14 @@
-log_*/ 
-data_lake
+#-------------------------------------------------------------
+#-------------------------------------------------------------
+data_lake/*
+!data_lake/metadata.db
+
 .samples
 #ignore the backup file , heavy file to keep in repo
 WideWorldImporters-Full.bak 
 
-
+#-------------------------------------------------------------
+#-------------------------------------------------------------
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

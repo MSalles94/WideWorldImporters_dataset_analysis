@@ -8,5 +8,6 @@ dependencies = [
     "apache-airflow==3.3.0",
     "apache-airflow-providers-docker>=4.5.7",
     "pandas>=3.0.3",
+    "pyarrow>=25.0.0",
     "pyodbc>=5.3.0",
 ]

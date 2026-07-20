@@ -7,9 +7,8 @@ class define_path():
 
         #
         DIR_PATH_DATA_LAKE = (
-            BASE_PATH
+            BASE_PATH.parent[2]
             / "data_lake"
-            / "bronze"
             
         )
         DIR_PATH_DATA_LAKE.mkdir(
