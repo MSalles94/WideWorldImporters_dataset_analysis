@@ -1,7 +1,15 @@
 #-------------------------------------------------------------
 #-------------------------------------------------------------
 data_lake/*
-!data_lake/injestion_metadata.JSON
+ 
+!data_lake/*.JSON
+
+
+data_lake/customers/*
+!data_lake/customers/
+
+data_lake/orders/*
+!data_lake/orders/
 
 .samples
 #ignore the backup file , heavy file to keep in repo

@@ -5,44 +5,30 @@ from airflow.decorators import dag,task
 
 default_args={
     'owner':'Matheus',
-    'retries':1,
-    'retry_delay':timedelta(minutes=1)
+    'retries':0,
+    'retry_delay':timedelta(minutes=0)
 }
 @dag(
-    dag_id="task_flow_api_v1",
+    dag_id="testing_scripts",
     default_args=default_args,
     start_date=datetime(2026,7,6,1),
     schedule='@daily'
 )
 def tasks_definition():
-    
-    @task()
-    def get_first_name():
-        return "Matheus"
-    @task()
-    def get_last_name():
-        return "Salles"
-    
-    @task()
-    def get_age():
-        return 31
-
-    @task()
-    def greet(first_name,last_name,age):
-        print(f"""
-        Hello world, this is the mensage:
-        my name is {first_name} {last_name} and I'm {age} years old.""")    
 
     @task.bash()
-    def bash_comand(first_name):
-        return f"echo Hello World, this is bash. My name: {first_name}."
-    
-    first_name=get_first_name()
-    last_name=get_last_name()
-    age=get_age()
-     
+    def execute_python(logical_date):
+       
+        script_path='python_source.task_scripts.teste'
+        return f"""
+        docker exec python \
+        bash -c "cd /app && uv run python -m {script_path} \
+            --logical_date {logical_date.isoformat()}"
+        """
 
-    greet(first_name,last_name,age)
-    bash_comand(first_name)
+ 
+    execute_python()
+  
+     
 
 greet_dag=tasks_definition()

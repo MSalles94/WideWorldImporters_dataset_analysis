@@ -1,55 +1,41 @@
 from python_source.modules.data_base_connection import database_connection
-from python_source.modules.utils import define_path
+from python_source.modules.utils import mapping_paths
 from python_source.modules.log_control import create_log_object
+from python_source.modules.metadata import config_dateRange
  
 import pandas as pd
 
+#define paths
+path_obj=mapping_paths()
+DATA_LAKE_PATH=path_obj.data_lake
+LOG_PATH=path_obj.logs 
 
-path_obj=define_path(table_name='customers')
-DATA_LAKE_PATH=path_obj.DATA_LAKE_PATH
-LOG_PATH=path_obj.LOG_PATH
- 
+#start log
 logger=create_log_object( LOG_PATH)
 
-  
-# -------------------------
-# Conexão SQL Server
-# -------------------------
-
-def get_connection():
-
-    logger.mensage(
-        "Criando conexão SQL Server"
-    )
-    
-    sqlserver_access=database_connection(database='sqlserver')
-    conn=sqlserver_access.conn
-
-    
-    return conn
-
-
-
-# -------------------------
-# Extração
-# -------------------------
-
+#date configs for extraction
+dt_i,dt_f,year,month=config_dateRange()
+ 
+ 
+# Extract 
 def extract_customers():
  
     logger.mensage(
-        "Iniciando ingestão customers"
+        "Starting extraction, table: customers"
     )
 
 
     try:
 
-        conn = get_connection()
+        logger.mensage( "Connect to SQL Server"  )
+        sqlserver_access=database_connection(database='sqlserver')
+        conn=sqlserver_access.conn
+ 
 
 
-        query = """
-
+        query = f"""
        SELECT
-            top 10
+            TOP 10
                 CustomerID
                 ,CustomerName
                 ,BillToCustomerID
@@ -81,14 +67,15 @@ def extract_customers():
                 ,LastEditedBy
                 ,ValidFrom
                 ,ValidTo
-        from WideWorldImporters.sales.Customers c 
+        FROM WideWorldImporters.sales.Customers c 
+        WHERE 1=1
+            AND ValidFrom >= {dt_i}
+            AND ValidFrom <= {dt_f}
 
         """
 
 
-        logger.mensage(
-            "Executando query customers"
-        )
+        logger.mensage("Execute query")
 
 
         df = pd.read_sql(
@@ -98,75 +85,35 @@ def extract_customers():
 
 
         rows = len(df)
-
-
-        logger.mensage(
-            f"Registros extraídos: {rows}"
-        )
-
+        logger.mensage(f"Rows extracted: {rows}")
 
         if rows == 0:
-
-            logger.mensage(
-                "Nenhum registro encontrado"
-            )
-
+            logger.mensage("No rows extracted")
             return
-
-
-
-        # -------------------------
-        # Salvando parquet
-        # -------------------------
-
-        file_path = (
-            DATA_LAKE_PATH
-            /
-            "customers.parquet"
-        )
-
-
+ 
+        # save data
+        year_partition=( DATA_LAKE_PATH /"customer"/ f"year={year}"  )
+        month_partition=(year_partition / f"month={month}")
+        file_path=(month_partition / "customers.parquet")
+ 
+ 
         df.to_parquet(
             file_path,
             engine="pyarrow",
             index=False
         )
 
+        logger.mensage(f"Saved: {file_path}" )
 
-        logger.mensage(
-            f"Arquivo salvo: {file_path}"
-        )
-
- 
-
-        logger.mensage(
-            f"Ingestão finalizada"
-        )
-
-
+        logger.mensage( f"Ingestion finish" )
 
     except Exception as error:
-
-
-        logger.mensage(
-            f"Erro na ingestão customers: {error}"
-        )
-
-
+        logger.mensage(f"Error: {error}")
         raise
 
-
-
     finally:
-
         if "conn" in locals():
-
             conn.close()
-
-            logger.mensage(
-                "Conexão encerrada"
-            )
-
-
+            logger.mensage("Disconnect from SQL server")
 
  

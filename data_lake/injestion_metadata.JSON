@@ -1,9 +1,12 @@
-{   
+{  
+     "INFO":{
+        "OBSERVATION":"This file is a sample to controle a incremental load"
+     },
     "standard":{
         "load_type": "incremental", 
         "watermark_column":"",
         "last_value": "2026-07-21T18:35:42"
-
+        
     },
     "customers":{
         "load_type": "incremental", 

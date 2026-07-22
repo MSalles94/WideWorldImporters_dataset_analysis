@@ -1,15 +1,19 @@
 from pathlib import Path
 import json
 from typing import Any
+import os
 
 
 class MetadataManager:
-    def __init__(self ):
-        from python_source.modules.utils import mapping_paths
-        path_root=mapping_paths().root
+    def __init__(self  ): 
 
-        json_path=(path_root / 'data_lake' / 'injestion_metadata.JSON')
+        
+        json_path=os.environ["METADATA_FILE"]
+        json_path=Path(json_path)
         self.file_path = json_path
+
+        print(self.file_path)
+        
 
         if not self.file_path.exists():
             self.file_path.parent.mkdir(parents=True, exist_ok=True)
@@ -68,4 +72,16 @@ class MetadataManager:
 
     def list_tables(self):
         return list(self.data.keys())
- 
+
+
+def config_dateRange():
+    #date range for query filters
+    from python_source.modules.metadata import MetadataManager
+    from python_source.modules.utils import date_reference
+    
+    config_parameters=MetadataManager().get('load_configuration') 
+   
+    ref_days=date_reference(year=config_parameters['year'],month=config_parameters['month'])
+    return [str(i) for i in (ref_days.first_day,ref_days.last_day)]+[config_parameters['year'],config_parameters['month']]
+
+

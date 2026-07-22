@@ -12,7 +12,7 @@ services:
 
     volumes:
       #create a volume to export files as output and logs
-      - ./datalake:/app/datalake
+      - ./data_lake:/app/data_lake
       - ./python_source:/app/python_source
       - ./logs:/app/logs
 
@@ -23,6 +23,7 @@ services:
     #  - postgres
     environment:
       PATH: "/app/.venv/bin:$PATH"
+      METADATA_FILE: /app/data_lake/config_extraction.JSON
       
       SQL_SERVER_HOST: ${SQL_SERVER_HOST}
       SQL_SERVER_USER: ${SQL_SERVER_USER}
