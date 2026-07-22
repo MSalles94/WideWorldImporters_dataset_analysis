@@ -12,7 +12,7 @@ services:
 
     volumes:
       #create a volume to export files as output and logs
-      - ./output:/app/output
+      - ./datalake:/app/datalake
       - ./python_source:/app/python_source
       - ./logs:/app/logs
 

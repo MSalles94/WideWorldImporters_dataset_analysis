@@ -1,20 +1,18 @@
-{
+{   
+    "standard":{
+        "load_type": "incremental", 
+        "watermark_column":"",
+        "last_value": "2026-07-21T18:35:42"
+
+    },
     "customers":{
-        "source_system": "SQLServer",
-        "source_database": "WideWorldImporters",
-        "source_schema": "Sales",
-        "source_table": "Customers",
-        "load_type": "INCREMENTAL",
-        "watermark_column": "LastEditedWhen",
-        "active": true
+        "load_type": "incremental", 
+        "watermark_column":"",
+        "last_value": "2026-07-21T18:35:42"
     },
     "orders":{
-        "source_system": "SQLServer",
-        "source_database": "WideWorldImporters",
-        "source_schema": "Sales",
-        "source_table": "Orders",
-        "load_type": "INCREMENTAL",
-        "watermark_column": "LastEditedWhen",
-        "active": true
+        "load_type": "incremental", 
+        "watermark_column":"",
+        "last_value": "2026-07-21T18:35:42"
     }
 }
