@@ -1,7 +1,7 @@
 #-------------------------------------------------------------
 #-------------------------------------------------------------
 data_lake/*
-!data_lake/metadata.db
+!data_lake/injestion_metadata.JSON
 
 .samples
 #ignore the backup file , heavy file to keep in repo

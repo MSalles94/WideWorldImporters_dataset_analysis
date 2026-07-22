@@ -1,58 +1,71 @@
-import json
 from pathlib import Path
+import json
+from typing import Any
 
 
 class MetadataManager:
+    def __init__(self ):
+        from python_source.modules.utils import mapping_paths
+        path_root=mapping_paths().root
 
-    def __init__(self, file_path):
-
-        self.file_path = Path(__file__).parent[2] / 'data_lake' /'injestion_metadata.JSON'
- 
-
-
-    def read(self):
+        json_path=(path_root / 'data_lake' / 'injestion_metadata.JSON')
+        self.file_path = json_path
 
         if not self.file_path.exists():
-            return []
+            self.file_path.parent.mkdir(parents=True, exist_ok=True)
+            self._save({})
 
-        with open(self.file_path, "r", encoding="utf-8") as file:
-            return json.load(file)
+        self._load()
 
+    def _load(self):
+        with open(self.file_path, "r", encoding="utf-8") as f:
+            self.data = json.load(f)
 
-    def write(self, data):
+    def _save(self, data=None):
+        if data is None:
+            data = self.data
 
-        with open(self.file_path, "w", encoding="utf-8") as file:
+        with open(self.file_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4)
 
-            json.dump(
-                data,
-                file,
-                indent=4,
-                ensure_ascii=False
-            )
+    def reload(self):
+        self._load()
 
-    def upsert(self, new_config):
+    def save(self):
+        self._save()
 
-        configs = self.read()
+    def exists(self, table: str) -> bool:
+        return table in self.data
 
-        found = False
+    def get(self, table: str) -> dict | None:
+        return self.data.get(table)
 
+    def set(self, table: str, values: dict):
+        self.data[table] = values
+        self.save()
 
-        for config in configs:
+    def update(self, table: str, **kwargs):
+        if table not in self.data:
+            self.data[table] = {}
 
-            if (
-                config["source_schema"] == new_config["source_schema"]
-                and
-                config["source_table"] == new_config["source_table"]
-            ):
+        self.data[table].update(kwargs)
+        self.save()
 
-                config.update(new_config)
+    def delete(self, table: str):
+        if table in self.data:
+            del self.data[table]
+            self.save()
 
-                found = True
-                break
+    def get_value(self, table: str, key: str, default=None):
+        return self.data.get(table, {}).get(key, default)
 
+    def set_value(self, table: str, key: str, value: Any):
+        if table not in self.data:
+            self.data[table] = {}
 
-        if not found:
-            configs.append(new_config)
+        self.data[table][key] = value
+        self.save()
 
-
-        self.write(configs)
+    def list_tables(self):
+        return list(self.data.keys())
+ 

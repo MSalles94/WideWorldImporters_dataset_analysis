@@ -1,0 +1,20 @@
+{
+    "customers":{
+        "source_system": "SQLServer",
+        "source_database": "WideWorldImporters",
+        "source_schema": "Sales",
+        "source_table": "Customers",
+        "load_type": "INCREMENTAL",
+        "watermark_column": "LastEditedWhen",
+        "active": true
+    },
+    "orders":{
+        "source_system": "SQLServer",
+        "source_database": "WideWorldImporters",
+        "source_schema": "Sales",
+        "source_table": "Orders",
+        "load_type": "INCREMENTAL",
+        "watermark_column": "LastEditedWhen",
+        "active": true
+    }
+}
