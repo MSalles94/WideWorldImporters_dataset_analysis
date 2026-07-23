@@ -1,6 +1,17 @@
 {
     "load_configuration":{
+        "log_register": false,
+        
         "year":2015,
-        "month":1
+        "month":1,
+
+        "first_date":{
+            "year":2015,
+            "month":1
+        },
+        "last_date":{
+            "year":2015,
+            "month":6
+        }
     }
 }

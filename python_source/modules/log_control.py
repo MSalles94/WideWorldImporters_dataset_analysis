@@ -5,6 +5,7 @@ class create_log_object():
  
         logging.basicConfig(
             filename=LOG_PATH,
+            filemode='w',
             level=logging.INFO,
             format=(
                 "%(asctime)s | "

@@ -22,3 +22,12 @@
     * countries
     * people
     * stateprovinces
+
+
+
+## Testing
+
+Comando para testar codigo dentro do container "python"
+```bash
+uv run python -m python_source.task_scripts.teste
+```

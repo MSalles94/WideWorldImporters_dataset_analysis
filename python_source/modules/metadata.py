@@ -12,7 +12,7 @@ class MetadataManager:
         json_path=Path(json_path)
         self.file_path = json_path
 
-        print(self.file_path)
+    
         
 
         if not self.file_path.exists():
@@ -80,8 +80,37 @@ def config_dateRange():
     from python_source.modules.utils import date_reference
     
     config_parameters=MetadataManager().get('load_configuration') 
-   
+
+     
+       
     ref_days=date_reference(year=config_parameters['year'],month=config_parameters['month'])
     return [str(i) for i in (ref_days.first_day,ref_days.last_day)]+[config_parameters['year'],config_parameters['month']]
 
 
+
+class metadata_configs():
+
+    def __init__(self):
+        from python_source.modules.metadata import MetadataManager  
+        from datetime import datetime
+        from dateutil.relativedelta import relativedelta
+
+        config_parameters=MetadataManager().get('load_configuration')  
+        self.metadata=config_parameters
+
+        #get dates
+            #used to filter the query
+        get_dates=lambda x:datetime (config_parameters[x]['year'],config_parameters[x]['month'],1 ).date()
+
+        self.first_date=get_dates('first_date')
+
+        self.last_date=(get_dates('last_date')+relativedelta(month=1))-relativedelta(day=1)
+        self.last_date=get_dates('last_date')
+
+        #log register
+            # to say if the historic log files should be saved 
+        self.log_register = config_parameters['log_register']
+
+
+
+        
